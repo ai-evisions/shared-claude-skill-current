@@ -22,12 +22,29 @@ Neither preserves the expensive knowledge from a long session: the approach that
 ### The workflow that actually works
 
 ```
-/current        # writes the handoff file, puts "read <path>" on your clipboard
+/current        # writes the handoff file, puts a resume prompt on your clipboard
 /clear          # wipe the context window
 Cmd+V, Enter    # paste the resume prompt back
 ```
 
-Three keystrokes, no path typing: the skill copies the whole `read /path/to/CURRENT.md` prompt to the system clipboard, and the clipboard survives `/clear` because it belongs to the OS, not to the session. If you copy something else in between you lose it — the skill also prints the path, which is the fallback.
+No path typing: the skill copies a complete resume prompt to the system clipboard, and the clipboard survives `/clear` because it belongs to the OS, not to the session. If you copy something else in between you lose it — the skill also prints the path, which is the fallback.
+
+What gets copied is not a bare path but a prompt that tells the fresh session it is a continuation, where the context lives, and which skill was driving the work:
+
+```
+Continuing a previous session. I ran /clear, so you have no history — but this is not a fresh start.
+
+1. Read /path/to/project/CURRENT.md first and treat it as your primary context. It records what was
+   done, what was tried and failed, gotchas, architectural decisions and the TODO to pick up.
+2. Load the /academy-quiz skill before continuing — the previous session was working under it.
+3. Do not re-explore the project beyond verifying what you actually need. The file is the handoff;
+   trust it unless something contradicts it.
+
+Then tell me in two or three sentences where we are and what you are picking up next, and wait for
+my go-ahead before changing anything.
+```
+
+Line 2 appears only when a slash command or skill was actually driving the previous session — the same value the skill records under **Active skill/workflow** in the handoff, so the information survives even if the clipboard does not. The closing recap is a cheap staleness check: if the file is out of date, you find out in two sentences instead of after the first wrong edit.
 
 Two things people get wrong:
 
@@ -75,7 +92,7 @@ Clipboard support is `pbcopy` on macOS, falling back to `wl-copy` / `xclip` on L
 
 Handoff first, because that is what the next session needs to read before anything else:
 
-- **Where to continue** — done and working / tried and NOT working / where I got stuck / TODO / gotchas / architectural decisions
+- **Where to continue** — last session + active skill/workflow / done and working / tried and NOT working / where I got stuck / TODO / gotchas / architectural decisions
 - **Git state** — branch, last commit, uncommitted files
 - **Project state** — overview, tech stack, structure, what works, what is in progress, what is not implemented
 - **Operational** — configuration, how to run, production URLs

@@ -43,6 +43,7 @@ Snapshot of the current project state + where to continue. Read me first before 
 ## Where to continue (session handoff)
 
 **Last session:** [one-line description of the main task]
+**Active skill/workflow:** [slash command that was driving the work, with arguments, e.g. `/academy-quiz 2.5.3` — or "none"]
 
 ### Done and working
 - [concrete changes, files, functions — with file paths]
@@ -155,12 +156,30 @@ Snapshot of the current project state + where to continue. Read me first before 
 # After creating the file
 
 1. Print its full absolute path on its own line (e.g. `/path/to/project/CURRENT.md`) so it is copy-paste ready.
-2. Put the ready-to-paste resume prompt on the system clipboard, so the next session is one paste away:
+2. Put a ready-to-paste **resume prompt** on the system clipboard, so the next session is one paste away. Copy this exact text, with the real absolute path filled in:
 
-   ```bash
-   printf 'read %s' "<absolute path to CURRENT.md>" | pbcopy
+   ```
+   Continuing a previous session. I ran /clear, so you have no history — but this is not a fresh start.
+
+   1. Read <ABSOLUTE PATH TO CURRENT.md> first and treat it as your primary context. It records what was done, what was tried and failed, gotchas, architectural decisions and the TODO to pick up.
+   2. Load the <SKILL> skill before continuing — the previous session was working under it.
+   3. Do not re-explore the project beyond verifying what you actually need. The file is the handoff; trust it unless something contradicts it.
+
+   Then tell me in two or three sentences where we are and what you are picking up next, and wait for my go-ahead before changing anything.
    ```
 
-   `pbcopy` is macOS. If it is unavailable, try `wl-copy`, then `xclip -selection clipboard` (Linux), then `clip.exe` (WSL). If none works, say so in one line and stop — the printed path from step 1 is the fallback. Copy the whole `read <path>` prompt, not just the path, so pasting is a complete instruction.
+   Line 2 is conditional: include it **only** if a slash command or skill was actually driving the previous session (the same value you wrote into "Active skill/workflow"), and name it exactly, with its arguments. If none was, drop the line entirely and renumber.
+
+   Write it to the clipboard with a quoted heredoc so nothing gets shell-expanded:
+
+   ```bash
+   cat <<'PROMPT' | pbcopy
+   [the resume prompt above, path and skill already filled in]
+   PROMPT
+   ```
+
+   Keep the heredoc body flush left in the command you actually run — a heredoc preserves leading whitespace, and indented lines would paste with the indentation attached.
+
+   `pbcopy` is macOS. If it is unavailable, try `wl-copy`, then `xclip -selection clipboard` (Linux), then `clip.exe` (WSL). If none works, say so in one line and stop — the printed path from step 1 is the fallback.
 3. Do NOT print the whole file content into the chat.
 4. Tell the user the next steps: "Run /clear, then paste (Cmd+V) and hit Enter — the resume prompt is already on your clipboard." Mention that the clipboard is lost if they copy something else in between, and the path above is the fallback.
