@@ -154,6 +154,13 @@ Snapshot of the current project state + where to continue. Read me first before 
 
 # After creating the file
 
-1. Print its full absolute path on its own line (e.g. `/path/to/project/CURRENT.md`) so it is copy-paste ready
-2. Do NOT print the whole file content into the chat
-3. Tell the user the next steps: "Copy the path above, run /clear, then start the next session with: read /path/to/CURRENT.md"
+1. Print its full absolute path on its own line (e.g. `/path/to/project/CURRENT.md`) so it is copy-paste ready.
+2. Put the ready-to-paste resume prompt on the system clipboard, so the next session is one paste away:
+
+   ```bash
+   printf 'read %s' "<absolute path to CURRENT.md>" | pbcopy
+   ```
+
+   `pbcopy` is macOS. If it is unavailable, try `wl-copy`, then `xclip -selection clipboard` (Linux), then `clip.exe` (WSL). If none works, say so in one line and stop — the printed path from step 1 is the fallback. Copy the whole `read <path>` prompt, not just the path, so pasting is a complete instruction.
+3. Do NOT print the whole file content into the chat.
+4. Tell the user the next steps: "Run /clear, then paste (Cmd+V) and hit Enter — the resume prompt is already on your clipboard." Mention that the clipboard is lost if they copy something else in between, and the path above is the fallback.

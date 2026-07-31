@@ -22,14 +22,16 @@ Neither preserves the expensive knowledge from a long session: the approach that
 ### The workflow that actually works
 
 ```
-/current                       # write the handoff file
-/clear                         # wipe the context window
-read /path/to/CURRENT.md       # load your controlled context back
+/current        # writes the handoff file, puts "read <path>" on your clipboard
+/clear          # wipe the context window
+Cmd+V, Enter    # paste the resume prompt back
 ```
+
+Three keystrokes, no path typing: the skill copies the whole `read /path/to/CURRENT.md` prompt to the system clipboard, and the clipboard survives `/clear` because it belongs to the OS, not to the session. If you copy something else in between you lose it — the skill also prints the path, which is the fallback.
 
 Two things people get wrong:
 
-- **`CURRENT.md` is not loaded automatically.** After `/clear` it just sits on disk. You have to ask for it — that is why the skill prints the full path at the end, ready to paste.
+- **`CURRENT.md` is not loaded automatically.** After `/clear` it just sits on disk. You have to ask for it — that is why the skill copies the resume prompt and prints the full path at the end.
 - **`/current` + `/compact` is mostly redundant.** `/compact` does not empty the context, it replaces it with its own summary and carries on from there — so the session keeps running on the auto-summary you were trying to avoid. Pair `/current` with `/clear`, not `/compact`. (If you do stay on `/compact`, follow it immediately with `read /path/to/CURRENT.md` so the controlled version wins.)
 
 ---
@@ -63,7 +65,9 @@ Run it at the **end** of a session, before you clear:
 
 Also worth running after any major change you would not want to re-explain — a finished refactor, a resolved bug hunt, a decision you argued through.
 
-The skill prints the path it wrote and nothing else. It deliberately does not dump the file contents into the chat, because that would eat the context you are trying to reclaim.
+The skill prints the path it wrote and copies the resume prompt to your clipboard, and nothing else. It deliberately does not dump the file contents into the chat, because that would eat the context you are trying to reclaim.
+
+Clipboard support is `pbcopy` on macOS, falling back to `wl-copy` / `xclip` on Linux and `clip.exe` on WSL. If none of them is available the skill says so and you use the printed path instead — nothing else breaks. Depending on your permission settings Claude Code may ask to approve the `pbcopy` call the first time; allowlisting `Bash(printf *)` or the specific clipboard command makes `/current` a single uninterrupted step.
 
 ---
 
