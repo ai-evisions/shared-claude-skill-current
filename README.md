@@ -106,6 +106,7 @@ Re-running the skill does not blindly overwrite everything:
 - **Gotchas** and **Architectural decisions** are *merged* — old entries are never deleted unless the current session proved them wrong. These accumulate across sessions and are the whole point of the file.
 - **Handoff and status checklists** are regenerated each run. It is a snapshot, not a diary.
 - **Static sections** (tech stack, structure, how to run) are left alone when nothing substantial changed. They duplicate `README.md` / `CLAUDE.md` and do not need churning.
+- **A file in the wrong language is migrated to English.** `CURRENT.md` is always written in English, whatever language you talk to Claude in, because the file is read back as context later and a mixed-language file drags the next session into mirroring it. This overrides the rule above — a section in the wrong language counts as changed.
 
 ### Design constraints baked into the skill
 

@@ -26,6 +26,7 @@ One file, one source of truth. Replaces the classic `HANDOFF.md` / `resume.md` p
 - **Session handoff + status checklists** (Where to continue, Git state, Works / In progress / Not implemented): regenerate every time (snapshot, not a diary).
 - **Gotchas + Architectural decisions**: MERGE — add new items, NEVER delete old items unless the current session explicitly invalidated them.
 - **Static sections** (Project overview, Tech stack, Structure, Configuration, How to run): if they exist and nothing substantial changed, leave them untouched. Do not regenerate them each run — they duplicate CLAUDE.md/README and churn the file.
+- **Language migration**: if the existing file is not in English, rewrite it into English — section headings to the template names below, and translate the content you carry over. Older versions of this skill produced Slovak and Czech headings (`Kde pokračovať`, `Čo funguje`, `Ako spustiť`) plus emoji, and a file left in that state keeps pulling the next session into the wrong language. This overrides the rule above: a section in the wrong language is a section that changed.
 
 ---
 
@@ -143,6 +144,7 @@ Snapshot of the current project state + where to continue. Read me first before 
 
 # Rules
 
+- **English only** — write `CURRENT.md` in English no matter what language the conversation is in, and keep section headings exactly as the template names them. The file is read back as context by a later session; a mixed-language file drags that session into mirroring the wrong language.
 - **Facts only** — no evaluations.
 - **Current state** — what IS, not what SHOULD BE.
 - **Concrete** — exact file names, commands, URLs.
