@@ -11,6 +11,7 @@ Snapshot of the current project state + where to continue. Read me first before 
 ## Where to continue (session handoff)
 
 **Last session:** Wire the weekly report export to the scheduler and fix duplicated rows in the aggregation query.
+**Active skill/workflow:** none
 
 ### Done and working
 - `src/reports/aggregate.py` — added `GROUP BY campaign_id, week_start`, duplicates gone; verified against a 6-week sample.
